@@ -1,0 +1,5 @@
+.idea
+*temp
+.scrapy
+__pycache__
+.pytest_cache

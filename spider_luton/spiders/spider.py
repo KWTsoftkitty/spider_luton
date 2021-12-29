@@ -9,14 +9,6 @@ class SpiderLuton(scrapy.Spider):
     start_urls = ['http://www.luton.com.au/{}']
     xpath_str_for_href = '//*[@id="contentContainer"]/article/div/div/ul/li/div/a/@href'
     xpath_str_for_next_page = '//div[@class="pager-nav"]/a[contains(@class, "next")]/@href'
-    # xpath_str_for_detail_full_address = {'street_info': '//*[@id="contentContainer"]/div/h1/span/text()',
-    #                                      'suburb_name': '//*[@id="contentContainer"]/div/h1/small/span[1]',
-    #                                      'state_name': '//*[@id="contentContainer"]/div/h1/small/span[3]/text()',
-    #                                      'postal_code': '//*[@id="contentContainer"]/div/h1/small/span[2]/text()'}
-    # xpath_str_for_detail_listing_type = '//*[@id="contentContainer"]/div/div/div/text()'
-    # xpath_str_for_detail_agent = {
-    #     'name': '//*[@id="contentContainer"]/article/div/div[1]/ul/li[1]/div/div/div/span/text()',
-    #     'email': '//*[@id="contentContainer"]/article/div/div[1]/ul/li[1]/div/div/dl/dd[1]/a/@href'}
 
     default_xpath_strings = {'street_info': '//*[@id="contentContainer"]/div/h1/span/text()',
                              'suburb_name': '//*[@id="contentContainer"]/div/h1/small/span[1]',
@@ -24,8 +16,10 @@ class SpiderLuton(scrapy.Spider):
                              'postal_code': '//*[@id="contentContainer"]/div/h1/small/span[2]/text()',
                              'listing_type': '//*[@id="contentContainer"]/div/div/div/text()',
                              'agent_count': 'count(//*[@id="contentContainer"]/article/div/div[1]/ul/li)',
-                             'agent_name': '//*[@id="contentContainer"]/article/div/div[1]/ul/li[{}]/div/div/div/span/text()',
-                             'agent_email': '//*[@id="contentContainer"]/article/div/div[1]/ul/li[{}]/div/div/dl/dd[1]/a/text()'}
+                             'agent_name': '//*[@id="contentContainer"]/article/div/div[1]/ul/li[{'
+                                           '}]/div/div/div/span/text()',
+                             'agent_email': '//*[@id="contentContainer"]/article/div/div[1]/ul/li[{}]/div/div/dl/dd['
+                                            '1]/a/text()'}
 
     def start_requests(self):
         channels = ['/properties-for-sale', '/properties-for-rent']
@@ -38,16 +32,18 @@ class SpiderLuton(scrapy.Spider):
         for details_url in details_urls:
             item = SpiderLutonItem()
             item['url'] = details_url
-            yield scrapy.Request(details_url, callback=self.parse_detail_page, meta={'item': item})
+            yield scrapy.Request(details_url, callback=self.parse_detail_page)
 
         next_page_info = response.xpath(self.xpath_str_for_next_page).extract_first()
         if next_page_info != '#':
             next_page_url = self.start_urls[0].format(next_page_info[1:])
             yield scrapy.Request(next_page_url, callback=self.parse)
 
-    def _initialize_item(self, response, xpath_strings, item):
+    def _initialize_item(self, response, xpath_strings):
         street_info = response.xpath(
             self._get_xpath_str(xpath_strings, 'street_info')).extract_first()
+        item = SpiderLutonItem()
+        item['url'] = response._get_url()
         suburb_name = response.xpath(self._get_xpath_str(xpath_strings, 'suburb_name')).extract_first()
         state_name = response.xpath(self._get_xpath_str(xpath_strings, 'state_name')).extract_first()
         postal_code = response.xpath(self._get_xpath_str(xpath_strings, 'postal_code')).extract_first()
@@ -73,7 +69,7 @@ class SpiderLuton(scrapy.Spider):
     def _get_xpath_str(self, xpath_strings, property_name):
         return xpath_strings.get(property_name, self.default_xpath_strings[property_name])
 
-    def parse_detail_page(self, response):
-        item = response.meta['item']
-        pass
-        # yield self._initialize_item(response, self.default_xpath_strings, item)
+    def parse_detail_page(self, response, xpath_strings):
+        # item = response.meta['item']
+        item = self._initialize_item(response, xpath_strings)
+        yield item

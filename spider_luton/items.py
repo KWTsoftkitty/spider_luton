@@ -9,4 +9,7 @@ import scrapy
 class SpiderLutonItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    url = scrapy.Field()
+    full_address = scrapy.Field()
+    listing_type = scrapy.Field()
+    agent = scrapy.Field()

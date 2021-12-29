@@ -28,7 +28,7 @@ class SpiderLuton(scrapy.Spider):
             yield scrapy.Request(url, callback=self.parse)
 
     def parse(self, response):
-        details_urls = response.xpath(self.xpath_str_for_href).extract_first()
+        details_urls = response.xpath(self.xpath_str_for_href).extract()
         for details_url in details_urls:
             item = SpiderLutonItem()
             item['url'] = details_url

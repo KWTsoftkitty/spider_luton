@@ -4,7 +4,6 @@ from unittest import TestCase
 from scrapy.http import TextResponse
 from spider_luton.spider_luton.spiders.spider import SpiderLuton
 from spider_luton.spider_luton.items import SpiderLutonItem
-from scrapy import Request
 
 
 def _read_html(filename):
@@ -46,31 +45,28 @@ class SpiderTestCase(TestCase):
     def test_spider_parse_response(self):
         next_page_url = 'http://www.luton.com.au/properties-for-sale?page=2'
         self.expected_urls.append(next_page_url)
-        request_generator = self.spider_luton.parse(self.html_response)
-        self.assertEqual(self.expected_urls, [x.url for x in request_generator])
+        list_page_generator = self.spider_luton.parse(self.html_response)
+        self.assertEqual(self.expected_urls, [x.url for x in list_page_generator])
 
     def test__spider_parse_detail_initialize_item(self):
-        item = SpiderLutonItem()
-
-        expected_item = [{'url': 'https://www.luton.com.au/1P47501/403-25-edinburgh-avenue-acton',
+        expected_item = [{'url': 'test_detail_luton',
                           'full_address': '403/25 Edinburgh Avenue, Acton, ACT 2601', 'listing_type': 'sale',
                           'agent': [{'name': 'Sophie Luton', 'email': 'sophie.luton@luton.com.au'},
                                     {'name': 'Richard Luton', 'email': 'richard.luton@luton.com.au'}]}]
-        item['url'] = 'https://www.luton.com.au/1P47501/403-25-edinburgh-avenue-acton'
         self.assertEqual(expected_item[0]['url'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings, item)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
                              'url'])
         self.assertEqual(expected_item[0]['full_address'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings, item)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
                              'full_address'])
         self.assertEqual(expected_item[0]['listing_type'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings, item)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
                              'listing_type'])
         self.assertEqual(expected_item[0]['agent'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings, item)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
                              'agent'])
         self.assertEqual(expected_item[0]['agent'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings, item)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
                              'agent'])
 
     def test__get_xpath_str(self):

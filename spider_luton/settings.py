@@ -18,7 +18,7 @@ NEWSPIDER_MODULE = 'spider_luton.spiders'
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
 
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'WARNING'
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 # CONCURRENT_REQUESTS = 32

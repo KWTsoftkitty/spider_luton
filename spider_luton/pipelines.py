@@ -5,10 +5,21 @@
 
 
 # useful for handling different item types with a single interface
-from itemadapter import ItemAdapter
+import jsonlines
+import json
 
 
 class SpiderLutonPipeline:
+
+    def __init__(self):
+        self.fp = open('luton_data.jsonl', 'a')
+        self.writer = jsonlines.Writer(self.fp)
+
     def process_item(self, item, spider):
-        print(item['full_address'])
+        item_json = json.dumps(dict(item), ensure_ascii=False)
+        self.writer.write(item_json)
         return item
+
+    def close_spider(self, spider):
+        self.writer.close()
+        self.fp.close()

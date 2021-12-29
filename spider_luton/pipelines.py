@@ -10,4 +10,5 @@ from itemadapter import ItemAdapter
 
 class SpiderLutonPipeline:
     def process_item(self, item, spider):
+        print(item['full_address'])
         return item

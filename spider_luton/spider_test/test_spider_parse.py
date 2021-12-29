@@ -53,20 +53,21 @@ class SpiderTestCase(TestCase):
                           'full_address': '403/25 Edinburgh Avenue, Acton, ACT 2601', 'listing_type': 'sale',
                           'agent': [{'name': 'Sophie Luton', 'email': 'sophie.luton@luton.com.au'},
                                     {'name': 'Richard Luton', 'email': 'richard.luton@luton.com.au'}]}]
+        self.spider_luton.default_xpath_strings = self.xpath_strings
         self.assertEqual(expected_item[0]['url'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response)[
                              'url'])
         self.assertEqual(expected_item[0]['full_address'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response)[
                              'full_address'])
         self.assertEqual(expected_item[0]['listing_type'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response)[
                              'listing_type'])
         self.assertEqual(expected_item[0]['agent'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response)[
                              'agent'])
         self.assertEqual(expected_item[0]['agent'],
-                         self.spider_luton._initialize_item(self.detail_page_html_response, self.xpath_strings)[
+                         self.spider_luton._initialize_item(self.detail_page_html_response)[
                              'agent'])
 
     def test__get_xpath_str(self):
@@ -95,8 +96,8 @@ class SpiderTestCase(TestCase):
             item['agent'] = expected_items_info[index]['agent_info']
             expected_items.append(item)
 
-        detail_request_generator = self.spider_luton.parse_detail_page(self.detail_page_html_response,
-                                                                       self.xpath_strings)
+        self.spider_luton.default_xpath_strings = self.xpath_strings
+        detail_request_generator = self.spider_luton.parse_detail_page(self.detail_page_html_response)
         self.actual_item = next(detail_request_generator)
         self.assertEqual(expected_items[0]['url'], self.actual_item['url'])
         self.assertEqual(expected_items[0]['full_address'], self.actual_item['full_address'])

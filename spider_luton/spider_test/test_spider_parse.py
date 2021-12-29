@@ -66,4 +66,10 @@ class SpiderTestCase(TestCase):
         self.assertEqual(expected_item[0]['agent'], self.spider_luton._initialize_item(self.detail_page_html_response, xpath_strings, item)['agent'])
         self.assertEqual(expected_item[0]['agent'], self.spider_luton._initialize_item(self.detail_page_html_response, xpath_strings, item)['agent'])
 
+    def test__get_xpath_str(self):
+        xpath_strings = {'street_info': '123'}
+        expected_xpath_str = '123'
+        expected_default_xpath_str = '//*[@id="contentContainer"]/div/div/div/text()'
+        self.assertEqual(expected_xpath_str, self.spider_luton._get_xpath_str(xpath_strings, 'street_info'))
+        self.assertEqual(expected_default_xpath_str, self.spider_luton._get_xpath_str(xpath_strings, 'listing_type'))
 

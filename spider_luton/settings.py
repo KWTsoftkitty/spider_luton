@@ -44,9 +44,10 @@ DOWNLOAD_DELAY = 2
 #   'Accept-Language': 'en',
 # }
 
-USER_AGENT = {
+DEFAULT_REQUEST_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) '
-                  'Chrome/96.0.4664.110 Safari/537.36'}
+                  'Chrome/96.0.4664.110 Safari/537.36 '
+}
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
@@ -73,7 +74,7 @@ USER_AGENT = {
 # }
 
 ITEM_PIPELINES = {
-   'spider_luton.pipelines.SpiderLutonPipeline': 300,
+    'spider_luton.pipelines.SpiderLutonPipeline': 300,
 }
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

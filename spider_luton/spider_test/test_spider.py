@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from scrapy.http import TextResponse
 
-from spider_luton.spider_luton.spiders.spider import SpiderLuton
+from spider_luton.spiders.spider import SpiderLuton
 
 
 def _read_html(filename):

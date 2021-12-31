@@ -55,11 +55,15 @@ DEFAULT_REQUEST_HEADERS = {
 #    'spider_luton.middlewares.SpiderLutonSpiderMiddleware': 543,
 # }
 
+# SPIDER_MIDDLEWARES = {
+#     'spider_luton.middlewares.SpiderLutonSpiderMiddleware': 543,
+# }
+
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'spider_luton.middlewares.SpiderLutonDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+   'spider_luton.middlewares.SpiderLutonDownloaderMiddleware': 543,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -74,6 +78,7 @@ DEFAULT_REQUEST_HEADERS = {
 # }
 
 ITEM_PIPELINES = {
+    'spider_luton.pipelines.StateFilterPipeline': 290,
     'spider_luton.pipelines.SpiderLutonPipeline': 300,
 }
 # Enable and configure the AutoThrottle extension (disabled by default)

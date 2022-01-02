@@ -3,7 +3,7 @@ COPY . /code
 WORKDIR /code
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-FROM python:3-slim
+FROM gcr.io/distroless/python3
 ENV LANG C.UTF-8
 COPY --from=build-env /code /code
 WORKDIR /code
